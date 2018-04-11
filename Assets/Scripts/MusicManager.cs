@@ -21,6 +21,7 @@ public class MusicManager : MonoBehaviour {
 
     private void OnLevelWasLoaded(int level)
     {
+        music.Stop();
         AudioClip clip = levelMusicChangeArray[level];
         if (clip)
         {

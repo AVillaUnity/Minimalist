@@ -40,6 +40,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Trail
+    uniqueID: 2234791435
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Canvas
+    uniqueID: 2557664023
     locked: 0

@@ -5,36 +5,53 @@ using UnityEngine.UI;
 
 public class OptionsController : MonoBehaviour {
 
-    public LevelManager levelManager;
-    public Slider volumeSlider;
-    public Slider difficultySlider;
+    [SerializeField] Slider volumeSlider = null;
+    [SerializeField] Slider soundSlider = null;
+    [SerializeField] Toggle hintToggle = null;
+    [SerializeField] GameObject settingsPanel = null;
+
     private MusicManager music;
 
     private void Start()
     {
         music = GameObject.FindObjectOfType<MusicManager>();
         volumeSlider.value = PlayerPrefsManager.GetMasterVolume();
-        difficultySlider.value = PlayerPrefsManager.GetDifficulty();
+        soundSlider.value = PlayerPrefsManager.GetSoundVolume();
+        hintToggle.isOn = PlayerPrefsManager.GetHintToggle();
     }
+
+
 
     private void Update()
     {
         music.ChangeVolume(volumeSlider.value);
     }
 
+    public void OpenSettings()
+    {
+        settingsPanel.SetActive(true);
+    }
+    public void CloseSettings()
+    {
+        settingsPanel.SetActive(false);
+        volumeSlider.value = PlayerPrefsManager.GetMasterVolume();
+        soundSlider.value = PlayerPrefsManager.GetSoundVolume();
+        hintToggle.isOn = PlayerPrefsManager.GetHintToggle();
+    }
+
 
     public void SaveAndExit()
     {
         PlayerPrefsManager.SetMasterVolume(volumeSlider.value);
-        PlayerPrefsManager.SetDifficulty(difficultySlider.value);
-        levelManager.LoadLevel("Main Menu");
+        PlayerPrefsManager.SetSoundVolume(soundSlider.value);
+        PlayerPrefsManager.SetHintToggle(hintToggle.isOn);
+        settingsPanel.SetActive(false);
     }
 
     public void RestoreDefaults()
     {
-        PlayerPrefsManager.SetMasterVolume(1.0f);
-        PlayerPrefsManager.SetDifficulty(1);
-        volumeSlider.value = PlayerPrefsManager.GetMasterVolume();
-        difficultySlider.value = PlayerPrefsManager.GetDifficulty();
+        volumeSlider.value = 1.0f;
+        soundSlider.value = 1.0f;
+        hintToggle.isOn = true;
     }
 }
