@@ -12,7 +12,7 @@ public class Shredder : MonoBehaviour {
         {
             if (SceneManager.GetActiveScene().buildIndex == 2)
             {
-                GameObject enemy = collision.gameObject.GetComponent<Projectile>().FindParent();
+                GameObject enemy = collision.gameObject.GetComponent<Projectile>().EnemyParent;
                 enemy.GetComponentInChildren<AmmoManager>().OnProJectileDestroyed();
             }
             Destroy(collision.gameObject);

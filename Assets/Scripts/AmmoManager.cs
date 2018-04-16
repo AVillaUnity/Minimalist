@@ -5,12 +5,13 @@ using TMPro;
 
 public class AmmoManager : MonoBehaviour {
 
-    [SerializeField] int minAmmo = 0;
-    [SerializeField] int maxAmmo = 0;
+    public static int minAmmo = 5;
+    public static int maxAmmo = 5;
 
-    TextMeshPro ammoText = null;
-    LevelManager levelManager = null;
-    int enemyAmmo = 0;
+    private int enemyAmmo = 0;
+    private TextMeshPro ammoText = null;
+    private LevelManager levelManager = null;
+    
 
     // Use this for initialization
     void Start () {
@@ -39,7 +40,14 @@ public class AmmoManager : MonoBehaviour {
 
     public void OnProJectileDestroyed()
     {
-        if (enemyAmmo == 0 && gameObject.activeInHierarchy)
-            levelManager.GameOver();
+        if (enemyAmmo == 0)
+            levelManager.GameOver(GetComponentInParent<SpriteRenderer>().sprite, GetComponentInParent<SpriteRenderer>().color, "Sender ran out of arrows!", true);
+
+    }
+
+    public static void UpdateAmmo(int min, int max)
+    {
+        minAmmo = min;
+        maxAmmo = max;
     }
 }

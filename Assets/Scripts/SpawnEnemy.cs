@@ -9,31 +9,40 @@ public class SpawnEnemy : MonoBehaviour {
     public static int enemyCounter = 0;
 
     private int enemiesAllowed = 0;
-
-    float spawnDelay = 0.5f;
-    Color[] enemyColors = null;
-    int index = 0;
+    private float spawnDelay = 0.5f;
+    private List<float> enemyColors;
+    private Score score;
     
 
 
 	// Use this for initialization
 	void Start () {
-        enemyColors = new Color[transform.childCount];
+        enemyColors = new List<float>();
+        score = GameObject.FindObjectOfType<Score>();
         enemyCounter = 0;
         enemiesAllowed = 0;
-}
+        AmmoManager.UpdateAmmo(5, 5);
+    }
 
     private void Update()
     {
         if (enemyCounter <= 0)
         {
+            score.ResetTimer();
+            enemyColors.Clear();
             enemiesAllowed++;
+            if(enemiesAllowed > 1)
+            {
+                AmmoManager.UpdateAmmo(AmmoManager.minAmmo + 1, AmmoManager.minAmmo * 2);
+            }
             if (enemiesAllowed > transform.childCount)
             {
                 enemiesAllowed = 0;
             }
             Spawn();
+            //print("(" + AmmoManager.minAmmo + ", " + AmmoManager.maxAmmo + ")");
         }
+        
     }
 
     void Spawn()
@@ -51,12 +60,18 @@ public class SpawnEnemy : MonoBehaviour {
 
     private void AssignColor(GameObject enemy)
     {
-        enemy.GetComponent<SpriteRenderer>().color = Random.ColorHSV(0f, 1f, .99f, .99f, .70f, .70f);
+        float hue = Mathf.Round(Random.Range(0f, 20f));
+        while (enemyColors.Contains(hue))
+        {
+            hue = Mathf.Round(Random.Range(0f, 20f));
+        }
+        enemyColors.Add(hue);
+        enemy.GetComponent<SpriteRenderer>().color = Color.HSVToRGB(hue * 16f / 320f, .99f, .70f);
         enemy.GetComponent<TrailRenderer>().startColor = enemy.GetComponent<SpriteRenderer>().color;
         enemy.GetComponent<TrailRenderer>().endColor = enemy.GetComponent<SpriteRenderer>().color;
     }
 
-    Transform GetNextAvailableSpawner()
+    private Transform GetNextAvailableSpawner()
     {
         Transform spawner = null;
         bool spawnFound = false;

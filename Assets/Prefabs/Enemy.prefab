@@ -415,8 +415,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af4842b8d0183e04b81aca16464dffb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minAmmo: 5
-  maxAmmo: 25
 --- !u!114 &114475021688156526
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -431,6 +429,7 @@ MonoBehaviour:
   projectile: {fileID: 1570839613094176, guid: 15f8836080c929046ab8655415800e4e, type: 2}
   particles: {fileID: 1829732323351320, guid: 5f636561f28e5da46a1e74dc577b8e95, type: 2}
   shotsPerSecond: 1
+  audioClip: {fileID: 8300000, guid: c5ec185e65d54634088d0395ab31930e, type: 3}
 --- !u!212 &212491848287072328
 SpriteRenderer:
   m_ObjectHideFlags: 1

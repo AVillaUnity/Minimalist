@@ -8,7 +8,7 @@ public class OuterSquare : MonoBehaviour {
     {
         if (collision.gameObject.tag == "Projectile")
         {
-            GameObject enemy = collision.gameObject.GetComponent<Projectile>().FindParent();
+            GameObject enemy = collision.gameObject.GetComponent<Projectile>().EnemyParent;
             enemy.GetComponent<Enemy>().CanFire = true;
         }
     }

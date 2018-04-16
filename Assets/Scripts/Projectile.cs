@@ -7,7 +7,8 @@ public class Projectile : MonoBehaviour {
     [SerializeField] float projectileSpeed = 1.0f;
     [SerializeField] float damage = .01f;
 
-    Vector2 projectileVelocity;
+    private Vector2 projectileVelocity;
+    private GameObject enemyParent;
 
     public float Damage
     {
@@ -26,17 +27,9 @@ public class Projectile : MonoBehaviour {
         set { projectileSpeed = value; }
     }
 
-    public GameObject FindParent()
-    {
-        Color projectileColor = GetComponent<SpriteRenderer>().color;
-        foreach(Enemy enemy in GameObject.FindObjectsOfType<Enemy>())
-        {
-            if(enemy.GetComponent<SpriteRenderer>().color == projectileColor)
-            {
-                return enemy.gameObject;
-            }
-        }
-        return null;
+    public GameObject EnemyParent {
+        get { return enemyParent; }
+        set { enemyParent = value; }
     }
 
     private void FixedUpdate()

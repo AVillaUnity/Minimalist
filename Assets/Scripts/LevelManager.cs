@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
 
 public class LevelManager : MonoBehaviour {
 
@@ -51,8 +53,20 @@ public class LevelManager : MonoBehaviour {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
-    public void GameOver()
+    public void GameOver(Sprite imageSprite, Color color, string reason, bool showSpriteText)
     {
+        if (!gameOverPanel.activeInHierarchy)
+        {
+            // set up reasoning behind gameover
+            gameOverPanel.transform.Find("Reason").Find("Reason Image").GetComponent<Image>().sprite = imageSprite;
+            gameOverPanel.transform.Find("Reason").Find("Reason Image").GetComponent<Image>().color = color;
+            gameOverPanel.transform.Find("Reason").Find("Reason Text").GetComponent<TextMeshProUGUI>().text = reason;
+            if (showSpriteText)
+                gameOverPanel.transform.Find("Reason").Find("Reason Image").GetChild(0).gameObject.SetActive(true);
+            else
+                gameOverPanel.transform.Find("Reason").Find("Reason Image").GetChild(0).gameObject.SetActive(false);
+        }
         gameOverPanel.SetActive(true);
+        
     }
 }

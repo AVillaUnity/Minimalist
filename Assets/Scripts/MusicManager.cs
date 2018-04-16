@@ -10,7 +10,6 @@ public class MusicManager : MonoBehaviour {
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
-        Debug.Log("Dont destroy on load" + gameObject);
     }
     // Use this for initialization
     void Start()
@@ -21,12 +20,14 @@ public class MusicManager : MonoBehaviour {
 
     private void OnLevelWasLoaded(int level)
     {
-        music.Stop();
         AudioClip clip = levelMusicChangeArray[level];
         if (clip)
         {
-            music.clip = clip;
-            music.Play();
+            if(music.clip != clip)
+            {
+                music.clip = clip;
+                music.Play();
+            }
         }
     }
 

@@ -6,9 +6,11 @@ using TMPro;
 
 public class Enemy : MonoBehaviour {
 
+
     [SerializeField] GameObject projectile = null;
     [SerializeField] GameObject particles = null;
     [SerializeField] float shotsPerSecond = 0.5f;
+    [SerializeField] AudioClip audioClip = null;
 
 
     bool canFire = true;
@@ -17,6 +19,7 @@ public class Enemy : MonoBehaviour {
     AmmoManager ammoManager = null;
     Score score = null;
     Core core = null;
+    
 
     public bool CanFire
     {
@@ -45,8 +48,11 @@ public class Enemy : MonoBehaviour {
         float probability = Time.deltaTime * shotsPerSecond;
 		if(Random.value < probability && GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Idle") && canFire && ammoManager.HasAmmo())
         { 
-            //Instantiate with enemy color     
+            //Instantiate   
             GameObject firedProjectile = Instantiate(projectile, new Vector3(transform.GetChild(0).position.x, transform.GetChild(0).position.y, -0.5f), Quaternion.identity);
+            firedProjectile.GetComponent<Projectile>().EnemyParent = gameObject;
+
+            //Set Color
             firedProjectile.GetComponent<SpriteRenderer>().color = GetComponent<SpriteRenderer>().color;
             firedProjectile.GetComponent<Light>().color = GetComponent<SpriteRenderer>().color;
 
@@ -61,25 +67,35 @@ public class Enemy : MonoBehaviour {
             canFire = false;
             ammoManager.DecreaseAmmo();
         }
-	}
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    DestroyEnemy();
+        //}
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.gameObject.tag == "Projectile")
         {
-            Destroy(collision.gameObject);
-            if (collision.GetComponent<SpriteRenderer>().color == GetComponent<SpriteRenderer>().color)
+            if (collision.gameObject.GetComponent<Projectile>().EnemyParent == gameObject)
             {
+                AudioSource.PlayClipAtPoint(audioClip, transform.position, PlayerPrefsManager.GetSoundVolume());
                 DestroyEnemy();
                 killed = true;
                 core.IncreaseSize(collision.gameObject.GetComponent<Projectile>().Damage);
                 core.HealthAnimation(GetComponent<SpriteRenderer>().color);
                 score.UpdateScore(GetComponent<SpriteRenderer>().color);
             }
-        } 
+            else
+            {
+                GameObject enemy = collision.gameObject.GetComponent<Projectile>().EnemyParent;
+                enemy.GetComponentInChildren<AmmoManager>().OnProJectileDestroyed();
+            }
+            Destroy(collision.gameObject);
+        }
     }
 
-    void DestroyEnemy()
+    public void DestroyEnemy()
     {
         SpawnEnemy.enemyCounter--;
         GameObject puff = Instantiate(particles, transform.position, Quaternion.identity);

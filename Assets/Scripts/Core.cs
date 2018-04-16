@@ -10,9 +10,10 @@ public class Core : MonoBehaviour {
 
     [SerializeField] float maxSize = 0.3f;
 
-    Color originalColor = Color.clear;
-    float tempoChange = .13f;
-    LevelManager levelManager = null;
+    private AudioSource audioSource = null;
+    private LevelManager levelManager = null;
+    private Color originalColor = Color.clear;
+    private float tempoChange = .13f;
 
 
     private void Start()
@@ -20,6 +21,8 @@ public class Core : MonoBehaviour {
         transform.localScale = new Vector3(maxSize, maxSize, maxSize);
         originalColor = GetComponent<SpriteRenderer>().color;
         levelManager = GameObject.FindObjectOfType<LevelManager>();
+        audioSource = GetComponent<AudioSource>();
+        audioSource.volume = PlayerPrefsManager.GetSoundVolume();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -27,8 +30,9 @@ public class Core : MonoBehaviour {
         bool canReduce = true;
         if (collision.gameObject.tag == "Projectile" && canReduce)
         {
+            audioSource.Play();
             ReduceSize(collision.gameObject.GetComponent<Projectile>().Damage);
-            GameObject enemy = collision.gameObject.GetComponent<Projectile>().FindParent();
+            GameObject enemy = collision.gameObject.GetComponent<Projectile>().EnemyParent;
             enemy.GetComponentInChildren<AmmoManager>().OnProJectileDestroyed();
             Destroy(collision.gameObject);
             InjureAnimation();
@@ -36,7 +40,7 @@ public class Core : MonoBehaviour {
         }
         if (transform.localScale == Vector3.zero)
         {
-            levelManager.GameOver();
+            levelManager.GameOver(GetComponent<SpriteRenderer>().sprite, GetComponent<SpriteRenderer>().color, "The Core has disappeared!", false);
             canReduce = false;
         }
     }

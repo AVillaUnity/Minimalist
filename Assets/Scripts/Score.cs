@@ -10,6 +10,9 @@ public class Score : MonoBehaviour {
     [SerializeField] Text highscoreText = null;
     [SerializeField] GameObject highscoreNotification = null;
 
+    private float scoreTimer1 = 0f;
+    private float scoreTimer2 = 0f;
+
 
     Animator canvasAnimator = null;
     bool highscoreAchieved = false;
@@ -25,6 +28,8 @@ public class Score : MonoBehaviour {
 
     public void UpdateScore(Color enemyColor)
     {
+        float succesiveTime = 0f;
+        float timeToGetBonus = 1.1f;
         score++;
         scoreText.text = score.ToString();
 
@@ -35,6 +40,33 @@ public class Score : MonoBehaviour {
     
         gameOverscoreText.text = scoreText.text;
         scoreText.color = enemyColor;
+
+        // Check for succesive points.
+        // too late for bonus
+        if ((Time.time - scoreTimer1) > timeToGetBonus)
+        {
+            ResetTimer();
+        }
+
+        if (scoreTimer1 <= 0)
+        {
+            scoreTimer1 = Time.time;
+        }
+        else
+        {
+            scoreTimer2 = Time.time;
+        }
+        if(scoreTimer1 > 0 && scoreTimer2 > 0)
+        {
+            succesiveTime = scoreTimer2 - scoreTimer1;
+            //print(succesiveTime);
+            if(succesiveTime <= timeToGetBonus)
+            {
+                //print("bonus!");
+                DoBonus();
+            }
+            ResetTimer();
+        }
     }
 
     void UpdateHighscore(int highscore)
@@ -47,6 +79,17 @@ public class Score : MonoBehaviour {
         }
         PlayerPrefsManager.SetHighscore(highscore);
         highscoreText.text = PlayerPrefsManager.GetHighscore().ToString();
+    }
+
+    void DoBonus()
+    {
+        canvasAnimator.SetTrigger("bonusAchieved");
+    }
+
+    public void ResetTimer()
+    {
+        scoreTimer1 = 0;
+        scoreTimer2 = 0;
     }
 
 
