@@ -37,7 +37,9 @@ public class SpawnEnemy : MonoBehaviour {
             }
             if (enemiesAllowed > transform.childCount)
             {
-                enemiesAllowed = 0;
+                enemiesAllowed = 1;
+                AmmoManager.UpdateAmmo(5, 5);
+
             }
             Spawn();
             //print("(" + AmmoManager.minAmmo + ", " + AmmoManager.maxAmmo + ")");

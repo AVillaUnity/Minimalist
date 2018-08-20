@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Advertisements;
 
 public class LevelManager : MonoBehaviour {
 
@@ -65,8 +66,19 @@ public class LevelManager : MonoBehaviour {
                 gameOverPanel.transform.Find("Reason").Find("Reason Image").GetChild(0).gameObject.SetActive(true);
             else
                 gameOverPanel.transform.Find("Reason").Find("Reason Image").GetChild(0).gameObject.SetActive(false);
+            Invoke("ShowAdGameOver", 1f);
         }
         gameOverPanel.SetActive(true);
-        
+
+        //Revert Time Back to Normal
+        Time.timeScale = 1f;
+        Time.fixedDeltaTime = 0.02f * Time.timeScale;
+
+
+    }
+
+    private void ShowAdGameOver()
+    {
+        Advertisement.Show();
     }
 }
