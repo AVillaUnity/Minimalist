@@ -79,6 +79,8 @@ public class LevelManager : MonoBehaviour {
 
     private void ShowAdGameOver()
     {
+#if (UNITY_ANDROID || UNITY_IOS)
         Advertisement.Show();
+#endif
     }
 }

@@ -20,7 +20,6 @@ public class Rotate : MonoBehaviour {
             rotateEvent(1.0f);
         else
         {
-            //Set screen size for Standalone
 #if UNITY_STANDALONE
             if (Input.GetButton("Horizontal"))
                 rotateEvent(-Input.GetAxis("Horizontal"));
